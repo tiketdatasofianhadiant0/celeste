@@ -11,6 +11,14 @@ func TestQuery_String(t *testing.T) {
 		want    string
 	}{
 		{
+			rawJSON: `{"source":"people"}`,
+			want:    "SELECT * FROM `people`",
+		},
+		{
+			rawJSON: `{"source":"people","columns":["name","age","gender"]}`,
+			want:    "SELECT name, age, gender FROM `people`",
+		},
+		{
 			rawJSON: `{"source":"people","find":{"$and":[{"name":{"$not_like":"\"%james%\""}}]}}`,
 			want:    "SELECT * FROM `people` WHERE name NOT LIKE \"%james%\"",
 		},

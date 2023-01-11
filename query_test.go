@@ -19,6 +19,10 @@ func TestQuery_String(t *testing.T) {
 			want:    "SELECT name, age, gender FROM `people`",
 		},
 		{
+			rawJSON: `{"source":"people","find":{"$and":[{"name":{"$like":"\"%james%\""}}]}}`,
+			want:    "SELECT * FROM `people` WHERE name LIKE \"%james%\"",
+		},
+		{
 			rawJSON: `{"source":"people","find":{"$and":[{"name":{"$not_like":"\"%james%\""}}]}}`,
 			want:    "SELECT * FROM `people` WHERE name NOT LIKE \"%james%\"",
 		},
@@ -27,8 +31,28 @@ func TestQuery_String(t *testing.T) {
 			want:    "SELECT * FROM `people` WHERE name IN (\"james\", \"bond\")",
 		},
 		{
+			rawJSON: `{"source":"people","find":{"$and":[{"name":{"$not_in":["\"james\"","\"bond\""]}}]}}`,
+			want:    "SELECT * FROM `people` WHERE name NOT IN (\"james\", \"bond\")",
+		},
+		{
+			rawJSON: `{"source":"people","find":{"$and":[{"name":{"$eq":{"$upper":"\"james\""}}}]}}`,
+			want:    "SELECT * FROM `people` WHERE name = UPPER(\"james\")",
+		},
+		{
+			rawJSON: `{"source":"people","find":{"$and":[{"name":{"$eq":{"$lower":"\"james\""}}}]}}`,
+			want:    "SELECT * FROM `people` WHERE name = LOWER(\"james\")",
+		},
+		{
+			rawJSON: `{"source":"people","find":{"$and":[{"name":{"$eq":{"$trim":"\"james\""}}}]}}`,
+			want:    "SELECT * FROM `people` WHERE name = TRIM(\"james\")",
+		},
+		{
 			rawJSON: `{"source":"people","find":{"$and":[{"name":"\"james\""},{"age":{"$gt":20}}]}}`,
 			want:    "SELECT * FROM `people` WHERE name = \"james\" AND age > 20",
+		},
+		{
+			rawJSON: `{"source":"people","find":{"$or":[{"name":"\"james\""},{"age":{"$gt":20}}]}}`,
+			want:    "SELECT * FROM `people` WHERE name = \"james\" OR age > 20",
 		},
 	}
 

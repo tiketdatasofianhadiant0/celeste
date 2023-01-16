@@ -58,7 +58,7 @@ func (t FindToken) conjunctionOr(arr []any) string {
 	return strings.Join(result, KeywordOr)
 }
 
-func (t FindToken) processToken(token map[string]any) string {
+func (t FindToken) processToken(token map[string]any, prevToken ...string) string {
 	formatAny := func(val any) (string, error) {
 		if i, ok := val.(int64); ok {
 			return fmt.Sprintf("%v", i), nil
@@ -93,6 +93,7 @@ func (t FindToken) processToken(token map[string]any) string {
 					result = append(result, fmt.Sprintf("%s %s", op, t.processToken(token)))
 				}
 			}
+
 			continue
 		}
 
@@ -101,7 +102,11 @@ func (t FindToken) processToken(token map[string]any) string {
 				result = append(result, fmt.Sprintf("%s(%s)", fn, v))
 			} else {
 				if token, ok := val.(map[string]any); ok {
-					result = append(result, fmt.Sprintf("%s(%s)", fn, t.processToken(token)))
+					sub := t.processToken(token)
+					if idx := strings.IndexAny(sub, ComparisonOperators); idx > 0 {
+						sub = "(" + sub[:idx-1] + ")" + sub[idx-1:]
+					}
+					result = append(result, fmt.Sprintf("%s%s", fn, sub))
 				}
 			}
 			continue

@@ -47,6 +47,18 @@ func TestQuery_String(t *testing.T) {
 			want:    "SELECT * FROM `people` WHERE name = TRIM(\"james\")",
 		},
 		{
+			rawJSON: `{"source":"people","find":{"$and":[{"$upper":{"name":{"$eq":"\"JAMES\""}}}]}}`,
+			want:    "SELECT * FROM `people` WHERE UPPER(name) = \"JAMES\"",
+		},
+		{
+			rawJSON: `{"source":"people","find":{"$and":[{"$lower":{"name":{"$eq":"\"james\""}}}]}}`,
+			want:    "SELECT * FROM `people` WHERE LOWER(name) = \"james\"",
+		},
+		{
+			rawJSON: `{"source":"people","find":{"$and":[{"$trim":{"name":{"$eq":"\"james\""}}}]}}`,
+			want:    "SELECT * FROM `people` WHERE TRIM(name) = \"james\"",
+		},
+		{
 			rawJSON: `{"source":"people","find":{"$and":[{"name":"\"james\""},{"age":{"$gt":20}}]}}`,
 			want:    "SELECT * FROM `people` WHERE name = \"james\" AND age > 20",
 		},

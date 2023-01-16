@@ -1,6 +1,8 @@
 package celeste
 
 const (
+	ComparisonOperators = "=<>"
+
 	ConjunctionAnd = "$and"
 	ConjunctionOr  = "$or"
 

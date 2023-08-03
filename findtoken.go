@@ -97,6 +97,18 @@ func (t FindToken) processToken(token map[string]any, prevToken ...string) strin
 			continue
 		}
 
+		if logicalOp, exists := logicalMap[key]; exists {
+			if v, err := formatAny(val); err == nil {
+				result = append(result, fmt.Sprintf("%s %s", v, logicalOp))
+			} else {
+				if token, ok := val.(map[string]any); ok {
+					result = append(result, fmt.Sprintf("%s %s", logicalOp, t.processToken(token)))
+				}
+			}
+
+			continue
+		}
+
 		if fn, exists := functionMap[key]; exists {
 			if v, err := formatAny(val); err == nil {
 				result = append(result, fmt.Sprintf("%s(%s)", fn, v))

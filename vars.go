@@ -17,6 +17,9 @@ const (
 	OperatorLike         = "$like"
 	OperatorNotLike      = "$not_like"
 
+	OperatorIsNull    = "$is_null"
+	OperatorIsNotNull = "$is_not_null"
+
 	FunctionLower = "$lower"
 	FunctionUpper = "$upper"
 	FunctionTrim  = "$trim"
@@ -43,5 +46,10 @@ var (
 		FunctionLower: "LOWER",
 		FunctionUpper: "UPPER",
 		FunctionTrim:  "TRIM",
+	}
+
+	logicalMap = map[string]string{
+		OperatorIsNull:    "IS NULL",
+		OperatorIsNotNull: "IS NOT NULL",
 	}
 )

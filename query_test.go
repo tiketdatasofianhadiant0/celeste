@@ -78,6 +78,10 @@ func TestQuery_String(t *testing.T) {
 			rawJSON: `{"source":"people","find":{"$or":[{"$is_null":"name"},{"age":{"$gt":20}}]}}`,
 			want:    "SELECT * FROM `people` WHERE name IS NULL OR age > 20",
 		},
+		{
+			rawJSON: `{"source":"people","find":{"$and":[{"$is_null":"name"},{"$is_not_null":"birthday"}]}}`,
+			want:    "SELECT * FROM `people` WHERE name IS NULL AND birthday IS NOT NULL",
+		},
 	}
 
 	for _, item := range tests {

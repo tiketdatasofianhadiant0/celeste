@@ -1,4 +1,4 @@
-module github.com/tiketdatarisal/celeste
+module github.com/tiketdatasofianhadiant0/celeste
 
 go 1.18
 
